@@ -4,7 +4,10 @@
   "description": "Content-addressed surface reads (file/grep/files) with anchored-chain provenance",
   "bounded": {
     "tagline": "Content-addressed surface reads (file/grep/files) with anchored-chain provenance",
-    "kind": "door"
+    "kind": "door",
+    "facet": "verb",
+    "role": "reader",
+    "domain": "external-read"
   },
   "license": "MIT",
   "type": "module",
