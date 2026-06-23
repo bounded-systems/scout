@@ -9,7 +9,9 @@
 import { closeSync, fstatSync, openSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { isAbsolute, join, relative, resolve } from "node:path";
 
+/** Input parameters for a scout grep search. */
 export interface ScoutGrepInput {
+  /** Regular expression pattern to search for. */
   pattern: string;
   /**
    * Directory to search. May be an absolute path, a path relative to cwd,
@@ -30,22 +32,39 @@ export interface ScoutGrepInput {
   cwd?: string | undefined;
 }
 
+/** A single match found by scout grep. */
 export interface ScoutGrepMatch {
+  /** Relative path of the file containing the match. */
   path: string;
+  /** Line number (1-indexed) where the match was found. */
   line: number;
+  /** Full content of the matching line. */
   content: string;
 }
 
+/** Output of a scout grep search operation. */
 export interface ScoutGrepResult {
+  /** Root directory that was searched. */
   root: string;
+  /** The search pattern used. */
   pattern: string;
+  /** List of all matches found. */
   matches: ScoutGrepMatch[];
+  /** True if results were truncated due to hitting maxResults. */
   truncated: boolean;
+  /** Total number of files scanned. */
   filesScanned: number;
 }
 
+/** Error thrown during a scout grep operation with an error code. */
 export class ScoutGrepError extends Error {
+  /** The error code (e.g., "MISSING_PATTERN", "INVALID_PATTERN", "ROOT_NOT_FOUND"). */
   readonly code: string;
+  /**
+   * Construct a ScoutGrepError.
+   * @param message Human-readable error description.
+   * @param code Machine-readable error code.
+   */
   constructor(message: string, code: string) {
     super(message);
     this.name = "ScoutGrepError";
@@ -197,6 +216,13 @@ function walkDir(ctx: WalkContext, dir: string): void {
   }
 }
 
+/**
+ * Search text files in a directory for a regular expression pattern.
+ * Walks the directory recursively, matching against text files, and returns all matches.
+ * @param input The grep search parameters (pattern, directory, limits).
+ * @returns The search results with matches and metadata.
+ * @throws ScoutGrepError if the pattern is invalid, root is not found, or other errors occur.
+ */
 export async function runScoutGrep(input: ScoutGrepInput): Promise<ScoutGrepResult> {
   if (typeof input.pattern !== "string" || input.pattern.length === 0) {
     throw new ScoutGrepError("pattern must not be empty", "MISSING_PATTERN");

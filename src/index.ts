@@ -36,6 +36,12 @@ export {
 export type {
   ScoutReadDerivationOptions,
   SlsaProvenanceStatement,
+  SlsaResourceDescriptor,
+  // Re-export anchored-chain types referenced in public API
+  Derivation,
+  DerivationStore,
+  Digest,
+  InTotoSubject,
 } from "./provenance.ts";
 export {
   SCOUT_READ_PRODUCER,

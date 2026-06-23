@@ -6,6 +6,7 @@
 import { readdirSync, statSync } from "node:fs";
 import { isAbsolute, join, relative, resolve } from "node:path";
 
+/** Input parameters for a scout files glob search. */
 export interface ScoutFilesInput {
   /** Glob pattern, e.g. star-star slash star dot nix. Matched against each file's relative path. */
   pattern: string;
@@ -22,20 +23,35 @@ export interface ScoutFilesInput {
   cwd?: string;
 }
 
+/** A single match found by scout files. */
 export interface ScoutFilesMatch {
+  /** Relative path of the matching file. */
   path: string;
 }
 
+/** Output of a scout files glob search operation. */
 export interface ScoutFilesResult {
+  /** Root directory that was searched. */
   root: string;
+  /** The glob pattern used. */
   pattern: string;
+  /** List of all matching files. */
   matches: ScoutFilesMatch[];
+  /** True if results were truncated due to hitting maxResults. */
   truncated: boolean;
+  /** Total number of files scanned. */
   filesScanned: number;
 }
 
+/** Error thrown during a scout files operation with an error code. */
 export class ScoutFilesError extends Error {
+  /** The error code (e.g., "MISSING_PATTERN", "INVALID_PATTERN", "ROOT_NOT_FOUND"). */
   readonly code: string;
+  /**
+   * Construct a ScoutFilesError.
+   * @param message Human-readable error description.
+   * @param code Machine-readable error code.
+   */
   constructor(message: string, code: string) {
     super(message);
     this.name = "ScoutFilesError";
@@ -175,6 +191,13 @@ function walkDir(ctx: WalkContext, dir: string): void {
   }
 }
 
+/**
+ * Search for files matching a glob pattern in a directory.
+ * Walks the directory recursively and returns all matching file paths.
+ * @param input The glob search parameters (pattern, directory, limits).
+ * @returns The search results with matching files and metadata.
+ * @throws ScoutFilesError if the pattern is invalid, root is not found, or other errors occur.
+ */
 export async function runScoutFiles(input: ScoutFilesInput): Promise<ScoutFilesResult> {
   if (typeof input.pattern !== "string" || input.pattern.length === 0) {
     throw new ScoutFilesError("pattern must not be empty", "MISSING_PATTERN");
