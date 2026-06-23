@@ -1,0 +1,10 @@
+{
+  "name": {
+    "type": "name",
+    "value": "Scout"
+  },
+  "description": {
+    "type": "meta",
+    "value": "Content-addressed surface reads (file/grep/files) with anchored-chain provenance"
+  }
+}
