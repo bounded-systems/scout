@@ -5,9 +5,9 @@
     "": {
       "name": "@bounded-systems/scout",
       "dependencies": {
-        "@bounded-systems/anchored-chain": "npm:@jsr/bounded-systems__anchored-chain",
-        "@bounded-systems/anchored-chain-sqlite": "npm:@jsr/bounded-systems__anchored-chain-sqlite",
-        "@bounded-systems/cas": "npm:@jsr/bounded-systems__cas",
+        "@bounded-systems/anchored-chain": "npm:@jsr/bounded-systems__anchored-chain@^0.2.1",
+        "@bounded-systems/anchored-chain-sqlite": "npm:@jsr/bounded-systems__anchored-chain-sqlite@^0.2.1",
+        "@bounded-systems/cas": "npm:@jsr/bounded-systems__cas@^0.1.2",
       },
       "devDependencies": {
         "@types/bun": "^1.3.14",
@@ -20,7 +20,7 @@
 
     "@bounded-systems/anchored-chain-sqlite": ["@jsr/bounded-systems__anchored-chain-sqlite@0.2.1", "https://npm.jsr.io/~/11/@jsr/bounded-systems__anchored-chain-sqlite/0.2.1.tgz", { "dependencies": { "@jsr/bounded-systems__anchored-chain": "^0.2.1", "@jsr/bounded-systems__cas": "^0.1.1", "drizzle-orm": "^0.45.2" } }, "sha512-uhmvcp3GC4vS1L7zsKrg1hP5lWahMj/fjkPtXXy6LbJU1um6LH8Vs0PVQj00Cazy3LiwQLuVc+klY0doA24jVw=="],
 
-    "@bounded-systems/cas": ["@jsr/bounded-systems__cas@0.1.1", "https://npm.jsr.io/~/11/@jsr/bounded-systems__cas/0.1.1.tgz", {}, "sha512-fD2vAvTY366X/ivqVT0aJ1Ngzq83B4P565zaAOWxYXEfTHy79daJpO+8AZT5GrqD7oXY9ARkH/mtPi1Bx70DlA=="],
+    "@bounded-systems/cas": ["@jsr/bounded-systems__cas@0.1.2", "https://npm.jsr.io/~/11/@jsr/bounded-systems__cas/0.1.2.tgz", {}, "sha512-Pp1MWl5KJL30HMLqFAZ+g62IYH9g5xpDDNUdRDgsdomnMamXnubg+yyg4N1elqaupa6Q7A/cmlaRtqP8KHu4eA=="],
 
     "@jsr/bounded-systems__anchored-chain": ["@jsr/bounded-systems__anchored-chain@0.2.1", "https://npm.jsr.io/~/11/@jsr/bounded-systems__anchored-chain/0.2.1.tgz", { "dependencies": { "@jsr/bounded-systems__cas": "^0.1.1" } }, "sha512-Xg2kxe2tnJpNfRqKev6cwwFzb6nEpzhi6/LUMuRCuvzGU3yvSju5CM7tt7RqH8MkmQVFAvPpT62/QvjLzloSBA=="],
 
