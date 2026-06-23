@@ -31,11 +31,16 @@ import { sha256Hex } from "@bounded-systems/cas";
 
 import { formatScoutReadJson, type ScoutReadResult } from "./read.ts";
 
+// Re-export types referenced in public API so they are not private-type-refs
+export type { Derivation, DerivationStore, Digest, InTotoSubject } from "@bounded-systems/anchored-chain";
+
+/** Producer identifier for scout read derivations. */
 export const SCOUT_READ_PRODUCER = "scout.read";
 
 /** The artifact contract a recorded scout-read envelope claims to satisfy. */
 export const SCOUT_READ_CONTRACT = "scout.read/v1";
 
+/** Options for constructing a scout read derivation. */
 export interface ScoutReadDerivationOptions {
   /** Derivation timestamp; injected so records are deterministic in tests. */
   now?: number;
@@ -99,29 +104,52 @@ export async function recordScoutReadDerivation(
 // adopting their runtime. A counterpart to scout's JSON-Schema export: scout
 // owns the shape it hands downstream.
 
+/** The in-toto Statement version used for scout read provenance. */
 export const IN_TOTO_STATEMENT_TYPE = "https://in-toto.io/Statement/v1";
+
+/** The SLSA Provenance v1 predicate type used for scout read provenance. */
 export const SLSA_PROVENANCE_PREDICATE_TYPE = "https://slsa.dev/provenance/v1";
+
+/** The build type for scout read provenance statements. */
 export const SCOUT_READ_BUILD_TYPE = "https://anchored-chain.dev/scout/read/v1";
+
+/** The builder identity for scout read provenance statements. */
 export const SCOUT_READ_BUILDER_ID = "https://anchored-chain.dev/scout.read";
 
-interface SlsaResourceDescriptor {
+/** A resource descriptor in SLSA provenance format. */
+export interface SlsaResourceDescriptor {
+  /** Name of the resource. */
   readonly name: string;
+  /** Digest of the resource. */
   readonly digest: { readonly sha256: string };
 }
 
+/** An in-toto Statement containing SLSA Provenance v1 for a scout read. */
 export interface SlsaProvenanceStatement {
+  /** The statement type identifier. */
   readonly _type: typeof IN_TOTO_STATEMENT_TYPE;
+  /** Subjects (artifacts) produced by this build. */
   readonly subject: readonly InTotoSubject[];
+  /** The predicate type identifier. */
   readonly predicateType: typeof SLSA_PROVENANCE_PREDICATE_TYPE;
+  /** The provenance predicate containing build definition and run details. */
   readonly predicate: {
+    /** Build definition metadata and parameters. */
     readonly buildDefinition: {
+      /** The type of build system. */
       readonly buildType: typeof SCOUT_READ_BUILD_TYPE;
+      /** External parameters that influenced the build. */
       readonly externalParameters: Readonly<Record<string, unknown>>;
+      /** Internal parameters used by the build system. */
       readonly internalParameters: Readonly<Record<string, unknown>>;
+      /** Resources that were resolved as dependencies. */
       readonly resolvedDependencies: readonly SlsaResourceDescriptor[];
     };
+    /** Details about the build run. */
     readonly runDetails: {
+      /** Information about the builder. */
       readonly builder: { readonly id: typeof SCOUT_READ_BUILDER_ID };
+      /** Metadata about the invocation. */
       readonly metadata: { readonly invocationId: string; readonly startedOn: string };
     };
   };

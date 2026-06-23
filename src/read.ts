@@ -11,6 +11,7 @@ import { isAbsolute, resolve } from "node:path";
 // re-adds the prefix); the prefixed `Digest` is the same bytes, wrapped.
 import { sha256BareHex } from "@bounded-systems/cas";
 
+/** Input parameters for reading and hashing a file. */
 export interface ScoutReadInput {
   /** Path to read. May be absolute, relative to `--in`, or relative to cwd. */
   path: string;
@@ -27,17 +28,31 @@ export interface ScoutReadInput {
   cwd?: string;
 }
 
+/** Output of a successful scout read operation. */
 export interface ScoutReadResult {
+  /** Resolved absolute path that was read. */
   path: string;
+  /** SHA256 hash of file content (bare hex, without prefix). */
   sha256: string;
+  /** Size of file in bytes. */
   bytes: number;
+  /** Number of lines in file (1+ for non-empty files). */
   lines: number;
+  /** True if file exceeded maxBytes and was not fully read. */
   truncated: boolean;
+  /** Full UTF-8 decoded content of the file. */
   content: string;
 }
 
+/** Error thrown during a scout read operation with an error code. */
 export class ScoutReadError extends Error {
+  /** The error code (e.g., "FILE_NOT_FOUND", "NOT_TEXT", "FILE_TOO_LARGE"). */
   readonly code: string;
+  /**
+   * Construct a ScoutReadError.
+   * @param message Human-readable error description.
+   * @param code Machine-readable error code.
+   */
   constructor(message: string, code: string) {
     super(message);
     this.name = "ScoutReadError";
@@ -130,6 +145,13 @@ function resolveTarget(input: ScoutReadInput): string {
   return isAbsolute(input.path) ? input.path : resolve(cwd, input.path);
 }
 
+/**
+ * Read a file, compute its SHA256 hash, and return metadata and content.
+ * Validates that the file is text and under the size limit.
+ * @param input The read parameters.
+ * @returns The read result with hash, size, and content.
+ * @throws ScoutReadError if the file is not found, not text, too large, or cannot be read.
+ */
 export async function runScoutRead(input: ScoutReadInput): Promise<ScoutReadResult> {
   if (typeof input.path !== "string" || input.path.length === 0) {
     throw new ScoutReadError("path must not be empty", "MISSING_PATH");
