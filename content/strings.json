@@ -5,6 +5,10 @@
   },
   "description": {
     "type": "meta",
-    "value": "Content-addressed surface reads (file/grep/files) with anchored-chain provenance"
+    "value": "Content-addressed surface reads — file, grep, files — with anchored-chain provenance.  When an agent reads the repository (a file's contents, a grep across it, a directory listing), scout addresses what it read by content digest and records the read in the anchored-chain deriv…"
+  },
+  "keywords": {
+    "type": "body",
+    "value": "SCOUT · CONTENT-ADDRESSED · PROVENANCE · GREP · SURFACE-READS"
   }
 }
